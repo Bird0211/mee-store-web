@@ -1,0 +1,17 @@
+<div class="banner">
+    <div nz-row nzAlign="bottom" nzJustify="space-between" class="max-width">
+        <div nz-col nzSpan="8">
+            <h4>Welcome to {{bizInfo.shopName}} Shop</h4>
+        </div>
+        <div nz-col >
+            <div *ngIf="user">
+    
+            </div>
+            <div *ngIf="!user">
+                <i nz-icon nzType="user" nzTheme="outline"></i>
+                <a><span>Register</span></a><span>/</span><a><span>Sign in</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
