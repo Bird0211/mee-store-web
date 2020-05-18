@@ -1,0 +1,47 @@
+<nz-select [(ngModel)]="category" 
+        (ngModelChange)="change($event)" 
+        (nzOpenChange)="openCategory($event)" 
+        [nzDropdownRender]="addCategoryTemp"
+        [nzLoading]="loading"
+        >
+    <nz-option *ngFor="let item of categories" [(nzValue)]="item.id" [nzLabel]="item.name"></nz-option>
+</nz-select>
+
+<nz-select [nzDropdownRender]="addSubCategoryTemp" 
+            (nzOpenChange)="openSubCategory($event)" 
+            [(ngModel)]="selectedCategory" 
+            (ngModelChange)="subCategoryChange($event)"
+            [nzLoading]="subLoading"
+            >
+    <nz-option *ngFor="let item of subCategories; let i=index" [nzValue]="item.id" [nzLabel]="item.name"></nz-option>
+</nz-select>
+
+
+<ng-template #addCategoryTemp>
+    <nz-divider></nz-divider>
+    <div class="add-item" [hidden]="!isShowCategory">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="输入类别名称" [(ngModel)]="newCategoryName"/>
+        </nz-input-group>
+            <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" (click)="addCategory()" nzSearch><i nz-icon nzType="plus"></i></button>
+        </ng-template>
+        <nz-divider></nz-divider>
+    </div>
+    <div class="add-item" (click)="addCategoryItem()"><i nz-icon nzType="plus"></i> Add item</div>
+</ng-template>
+
+
+<ng-template #addSubCategoryTemp>
+    <nz-divider></nz-divider>
+    <div class="add-item" [hidden]="!isShowSubCategory">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="输入类别名称" [(ngModel)]="newSubCategoryName"/>
+        </nz-input-group>
+            <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" (click)="addSubCategory()" nzSearch><i nz-icon nzType="plus"></i></button>
+        </ng-template>
+        <nz-divider></nz-divider>
+    </div>
+    <div class="add-item" (click)="addSubCategoryItem()"><i nz-icon nzType="plus"></i> Add item</div>
+</ng-template>

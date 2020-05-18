@@ -1,0 +1,19 @@
+<div>
+    <form nz-form [formGroup]="validateForm" nzLayout="horizontal">
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired  nzFor="selecedComany">快递公司</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select [(ngModel)]="selecedComany" (ngModelChange)="companyChange($event)" formControlName="selecedComany">
+                <nz-option *ngFor="let item of expressCompany" [nzValue]="item.code" [nzLabel]="item.name"></nz-option>
+            </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired  nzFor="expressCode">快递单号</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请填写快递单号!">
+              <input nz-input formControlName="expressCode" [(ngModel)]="expressCode" (ngModelChange)="codeChange($event)" />
+        </nz-form-control>
+      </nz-form-item >
+    </form>
+</div>
+

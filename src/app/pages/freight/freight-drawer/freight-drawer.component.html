@@ -1,0 +1,121 @@
+<nz-drawer
+      [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+      [nzMaskClosable]="false"
+      [nzWidth]="760"
+      [nzVisible]="visible"
+      [nzTitle]="title"
+      (nzOnClose)="close()"
+    >
+    <form nz-form nzLayout="vertical">
+        <div nz-row nzGutter="8">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>模板名称</nz-form-label>
+              <nz-form-control nzErrorTip="请输入运费模板名称!">
+                <input nz-input placeholder="请输入模板名称" [(ngModel)]="freight.name"  [ngModelOptions]="{standalone: true}"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row nzGutter="8">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>计价方式</nz-form-label>
+              <nz-form-control>
+                <nz-radio-group [(ngModel)]="freight.type" (ngModelChange)="selectType($event)"  [ngModelOptions]="{standalone: true}">
+                    <label nz-radio [nzValue]="0">按件数</label>
+                    <label nz-radio [nzValue]="1">按重量</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row nzGutter="8">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>配送区域及运费</nz-form-label>
+              <nz-form-control>
+                <nz-table #feightDetailTable 
+                          nzShowPagination="false" 
+                          [nzData]="freightDetails" 
+                          [nzFooter]="footer" 
+                          nzSize="small"
+                          nzTableLayout="fixed">
+                    <thead>
+                      <tr>
+                        <th nzWidth="120px" nzEllipsis=true>可配送区域</th>
+                        <th>{{firstTitle}}</th>
+                        <th>{{firstPriceTitle}}</th>
+                        <th>{{moreTitle}}</th>
+                        <th>{{morePriceTitle}}</th>
+                        <th>包邮类型</th>
+                        <th>{{freeShippingTitle}}</th>
+                        <th nzWidth="40px"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let data of feightDetailTable.data">
+                        <td nzEllipsis><a (click)="showCitys(data)">{{data.citys === '' ? '点击选择区域' : data.citys}}</a></td>
+                        <td><input nz-input [(ngModel)]="data.first" [ngModelOptions]="{standalone: true}"/></td>
+                        <td><input nz-input [(ngModel)]="data.firstPrice" [ngModelOptions]="{standalone: true}"/></td>
+                        <td><input nz-input [(ngModel)]="data.more" [ngModelOptions]="{standalone: true}"/></td>
+                        <td><input nz-input [(ngModel)]="data.morePrice" [ngModelOptions]="{standalone: true}"/></td>
+                        <td>
+                          <nz-radio-group [(ngModel)]="data.freeType" (ngModelChange)="changeFreeType($event)" [ngModelOptions]="{standalone: true}">
+                            <label nz-radio [nzValue]="0">无</label>
+                            <label nz-radio [nzValue]="1">按件包邮</label>
+                            <label nz-radio [nzValue]="2">按价包邮</label>
+                          </nz-radio-group>
+                        </td>
+                        <td><input nz-input [(ngModel)]="data.freeShipping" [ngModelOptions]="{standalone: true}" [disabled]="data.freeType === 0"/></td>
+                        <td><a (click)="removeRow(data.tid)"><i nz-icon nzType="delete" nzTheme="outline"></i></a></td>
+                      </tr>
+                    </tbody>
+                  </nz-table>
+                  <ng-template #footer>
+                    <button nz-button (click)="addRow()" nzType="default">点击添加可配送区域和运费</button>
+                  </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+      <div nz-row nzType="flex" nzAlign="middle" nzJustify="end" nzGutter="8">
+          <div nz-col> 
+            <button nz-button (click)="close()" nzType="default">取消</button>
+          </div>
+          <div nz-col>
+            <button nz-button (click)="save()" [nzLoading]="saveLoading" nzType="primary">保存</button>
+          </div>
+      </div>
+</nz-drawer>
+<nz-modal
+      [(nzVisible)]="isShowCitys"
+      nzTitle="选择地区"
+      (nzOnCancel)="handleCancel()"
+      (nzOnOk)="handleOk()"
+      [nzOkLoading]="isOkLoading"
+      
+    >
+    <div nz-row>
+      <div nz-col nzSpan="12" >
+          <ul nz-menu class="menu">
+            <nz-spin [nzSpinning]="isSpinning">
+              <li nz-menu-item>
+                <label nz-checkbox [(ngModel)]="allCity.checked" class="w-100" (ngModelChange)="onAllCityChecked($event)">{{allCity.city}}</label>
+              </li>
+              <li nz-menu-item *ngFor="let item of cities">
+                <label nz-checkbox [(ngModel)]="item.checked" class="w-100" (click)="onCityChecked(item)">{{item.city}}</label>
+              </li>
+            </nz-spin>
+          </ul>
+      </div>
+      <div nz-col nzSpan="12">
+        <ul nz-menu class="menu">
+          <li nz-menu-item *ngFor="let item of suburbs">
+            <label nz-checkbox class="w-100" [(ngModel)]="item.checked">{{item.suburb}}</label>
+           </li>
+        </ul>
+      </div>
+    </div>
+</nz-modal>

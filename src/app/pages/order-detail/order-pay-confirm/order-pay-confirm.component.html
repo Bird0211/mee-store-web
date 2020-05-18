@@ -1,0 +1,24 @@
+
+<div nz-row [nzGutter]="8">
+    <div nz-col nzSpan="8">
+        <nz-list nzSize="large" nzBordered nzHeader="支付金额" *ngIf="orderPayVo && orderPayVo.payDetails">
+            <nz-list-item *ngFor="let item of orderPayVo.payDetails">
+               <span>{{item.feeTypeName}}</span> 
+               <span>{{item.price|currency}}</span>
+            </nz-list-item>
+        </nz-list>
+    </div>
+    <div nz-col nzSpan="16" *ngIf="orderPayVo && orderPayVo.orderPay">
+        <nz-descriptions nzLayout="vertical" [nzTitle]="item.payCodeName" nzBordered *ngFor="let item of orderPayVo.orderPay">
+            <nz-descriptions-item nzTitle="支付金额">{{item.payPrice |currency}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="支付时间">{{orderPayVo.payTime}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="reference" *ngIf="item.reference">{{item.reference}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="payNo" *ngIf="item.payNo">{{item.payNo}}</nz-descriptions-item>
+        </nz-descriptions>
+    </div>
+</div>
+<div nz-row nzType="flex" nzJustify="end" nzGutter="8">
+    <div nz-col>        
+        <button nz-button nzType="primary" (click)="submit()" [nzLoading]="loading">确认支付</button>
+    </div>
+</div>

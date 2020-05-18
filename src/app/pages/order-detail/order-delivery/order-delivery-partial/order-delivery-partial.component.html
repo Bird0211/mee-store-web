@@ -1,0 +1,50 @@
+<div nz-row nzJustify="center" nzAlign="top">
+    <div nz-col class="divinfo">
+        <nz-table #basicTable [nzData]="orderDetail" nzShowPagination="false">
+            <thead>
+                <tr>
+                    <th
+                    [(nzChecked)]="checked"
+                    [nzIndeterminate]="indeterminate"
+                    (nzCheckedChange)="onAllChecked($event)"
+                    ></th>
+                    <th></th>
+                    <th>商品</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td [nzChecked]="setOfCheckedId.has(data.id)" 
+                        (nzCheckedChange)="onItemChecked(data.id, $event)"
+                    ></td>
+                    <td><a (click)="showImg(data.image)"><img [src]="data.image" class="productimg"></a></td>
+                    <td><h5>{{data.productName}} </h5><nz-tag [nzColor]="'blue'">{{data.specName}}</nz-tag></td>
+                    <td><nz-input-number [(ngModel)]="data.number" [nzStep]="1"></nz-input-number></td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+    <div nz-col class="divinfo">
+        <app-select-express-company [(expressCode)]="expressCode" [(selecedComany)]="selecedComany"></app-select-express-company>
+        <button nz-button class="login-form-button" [nzType]="'primary'" nzSize="large" [nzLoading]="loading" (click)="submit($event)">确定</button>
+    </div>
+</div>
+<nz-divider nzText="已发货订单" nzOrientation="left"></nz-divider>
+<div nz-row *ngIf="express" [nzGutter]="[8,8]" nzJustify="center">
+    <div nz-col nzSpan="20" *ngFor="let item of express">
+        <app-order-delivery-panel [express]="item"></app-order-delivery-panel>
+    </div>
+</div>
+
+
+<nz-modal
+        [nzVisible]="previewVisible"
+        [nzContent]="modalContent"
+        [nzFooter]="null"
+        (nzOnCancel)="previewVisible = false"
+      >
+        <ng-template #modalContent>
+          <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+        </ng-template>
+</nz-modal>

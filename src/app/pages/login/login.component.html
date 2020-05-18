@@ -1,0 +1,42 @@
+
+  <div nz-row nzType="flex" nzJustify="center" nzAlign="middle"> 
+    <div nz-col class="login-div">
+      <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item class="div-button">
+          <span class="head-font">登录</span>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your business code!">
+            <nz-input-group nzPrefixIcon="shop">
+              <input type="text" nz-input formControlName="code" placeholder="Business" nzSize="large"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your username!">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="userName" placeholder="Username" nzSize="large"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Password" nzSize="large"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="div-button">
+          <nz-form-control>
+            <div class="erroemsg">
+              <span>{{errormsg}}</span>
+            </div>
+            <label nz-checkbox formControlName="remember">
+              <span>Remember me</span>
+            </label>
+            <button nz-button class="login-form-button" [nzType]="'primary'" nzSize="large" [nzLoading]="loading">Log in</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div> 
+  </div>

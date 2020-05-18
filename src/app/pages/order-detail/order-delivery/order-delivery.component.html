@@ -1,0 +1,24 @@
+
+<nz-tabset [(nzSelectedIndex)]="expressType">
+  <nz-tab>
+      <app-order-delivery-express 
+          *ngIf="expressType === 0"
+          [orderId]="data" 
+          [express]="express" 
+          (update)="updateExpress($event)" 
+          (changeType)="changeExpressType($event)">
+      </app-order-delivery-express>
+  </nz-tab>
+  <nz-tab>
+      <app-order-delivery-partial 
+          *ngIf="expressType === 1"
+          [orderId]="data" 
+          [express]="express"
+          (update)="updateExpress($event)" 
+          (changeType)="changeExpressType($event)">
+      </app-order-delivery-partial>
+  </nz-tab>
+</nz-tabset>
+
+
+

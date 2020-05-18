@@ -1,0 +1,75 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="编辑商品" (nzOnCancel)="closeEditProduct()" (nzOnOk)="submitEditProduct()" nzWidth='800'>
+  <form nz-form [formGroup]="productForm">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入商品名称">
+            <input nz-input formControlName="name" id="name" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="description">描述</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入商品描述">
+            <input nz-input formControlName="description" id="description" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="category">类别</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" id="category">
+            <app-select-category [(selectedCategory)]="selectedSubCategory"></app-select-category>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="brand">品牌</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" id="brand">
+            <app-select-brand [(selectedBrand)]="selectedBrand" (brandChange)="brandChange($event)"></app-select-brand>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status">上架</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+                <nz-switch formControlName="status" [(ngModel)]="isShelves"></nz-switch>
+            </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="freight">运费设置</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <app-select-freight [(selectedFreight)]="selectedFreight"></app-select-freight>
+            </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="image">商品图片</nz-form-label>                    
+        <div class="ant-col-sm-14">
+            <nz-upload
+                class="avatar-uploader"
+                [nzAction]="uploadUrl"
+                nzName="image"
+                nzListType="picture-card"
+                [nzShowUploadList]="true"
+                [(nzFileList)]="fileList"
+                [nzShowButton]="fileList.length < 1"
+                [nzRemove]="removeProductImg"
+                nzLimit="1"
+                nzName="file"
+                nzFileType="image/png,image/jpeg"
+                nzSize="1024"
+                [nzPreview]="handlePreview"
+                (nzChange)="handleProductChange($event)"
+                >
+                <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                <div class="ant-upload-text">Upload</div>
+            </nz-upload>
+            <nz-modal
+            [nzVisible]="previewVisible"
+            [nzContent]="modalContent"
+            [nzFooter]="null"
+            (nzOnCancel)="previewVisible = false"
+            >
+            </nz-modal>
+        </div>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<ng-template #modalContent>
+    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+</ng-template>

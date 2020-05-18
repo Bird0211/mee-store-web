@@ -1,0 +1,37 @@
+
+<nz-collapse>
+    <nz-collapse-panel [nzHeader]="header" (nzActiveChange)="activeChange($event)" *ngIf="express" nzShowArrow="true">
+        <nz-table #basicTable [nzData]="orderDetail" nzShowPagination="false">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>商品</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td><a (click)="showImg(data.image)"><img [src]="data.image" class="productimg"></a></td>
+                    <td><h5>{{data.productName}} </h5><nz-tag [nzColor]="'blue'">{{data.specName}}</nz-tag></td>
+                    <td>{{data.number}}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-collapse-panel>
+</nz-collapse>
+<ng-template #header>
+    <nz-descriptions nzSize="small">
+        <nz-descriptions-item nzTitle="快递公司">{{express.expressCompanyName}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="快递单号">{{express.expressCode}}</nz-descriptions-item>
+    </nz-descriptions>
+</ng-template>
+<nz-modal
+        [nzVisible]="previewVisible"
+        [nzContent]="modalContent"
+        [nzFooter]="null"
+        (nzOnCancel)="previewVisible = false"
+      >
+        <ng-template #modalContent>
+          <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+        </ng-template>
+</nz-modal>

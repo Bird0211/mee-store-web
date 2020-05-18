@@ -1,0 +1,86 @@
+<nz-table #freightTable 
+            nzShowPagination="false" 
+            nzTableLayout="fixed" 
+            [nzTitle]="freightInfo" 
+            [nzData]="freightVo.freightDetail"
+            nzSize="small"
+            >
+    <thead>
+      <tr>
+        <th nzWidth="250px" nzEllipsis=true>可配送区域</th>
+        <th>{{firstTitle}}</th>
+        <th>{{firstPriceTitle}}</th>
+        <th>{{moreTitle}}</th>
+        <th>{{morePriceTitle}}</th>
+        <th>包邮类型</th>
+        <th>{{freeShippingTitle}}</th>
+        <th nzWidth="40px"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of freightTable.data">
+        <td nzEllipsis>{{data.citys}}</td>
+        <td>{{data.first}}</td>
+        <td>{{data.firstPrice}}</td>
+        <td>{{data.more}}</td>
+        <td>{{data.morePrice}}</td>
+        <td>
+            <span [ngSwitch]="data.freeType">
+            <p *ngSwitchCase="0">
+                无
+            </p>
+            <p *ngSwitchCase="1">
+                按件包邮
+            </p>
+            <p *ngSwitchCase="2">
+                按价包邮
+            </p>
+            </span>
+        </td>
+        <td>{{data.freeShipping}}</td>
+        <td><a (click)="removeFreightDetail(data.id)">
+              <span nz-tooltip nzTooltipTitle="删除">
+                <i nz-icon nzType="delete" nzTheme="outline"></i>
+              </span>
+            </a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  
+  <ng-template #freightInfo>
+    <div nz-row nzAlign="bottom" nzJustify="space-between" nzGutter="16" nzType="flex">
+        <div nz-col>
+          <div nz-row nzGutter="16" nzType="flex">
+            <div nz-col><h3>{{freightVo.freight.name}}</h3></div>
+            <div nz-col><span>{{freightVo.freight.type === 0 ? '按件数计费' : '按重量计费'}}</span></div>
+          </div>
+        </div>
+        <div nz-col>
+          <div nz-row nzGutter="16" nzType="flex">
+            <div nz-col>          
+              <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="setDefault($event)">默认模板</label>
+            </div>
+            <div nz-col>
+              <td><a (click)="editFreight()"><i nz-icon nzType="edit" nzTheme="outline"></i>编辑</a></td>
+            </div>
+            <div nz-col>
+              <a (click)="removeFreight()">
+                <span nz-tooltip nzTooltipTitle="删除">
+                  <i nz-icon nzType="delete" nzTheme="outline"></i>删除
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </ng-template>
+
+  <app-freight-drawer 
+        [visible]="visible" 
+        [freight]="freightVo.freight" 
+        [freightDetails]="freightVo.freightDetail" 
+        title="编辑运费模板" 
+        (loadFeight)="reLoadFreight()"
+        (visibleChange)="visibleChange($event)"></app-freight-drawer>
+  

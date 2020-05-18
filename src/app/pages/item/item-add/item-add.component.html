@@ -1,0 +1,181 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="添加商品" (nzOnCancel)="handleCancel()" (nzOnOk)="addProduct()" nzWidth='800'>
+    <form nz-form [formGroup]="productForm">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">名称</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入商品名称">
+                    <input nz-input formControlName="name" id="name" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="description">描述</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="请输入商品描述">
+                    <input nz-input formControlName="description" id="description" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="category">类别</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" id="category">
+                    <app-select-category [(selectedCategory)]="selectedSubCategory" (categoryChange)="categoryChange($event)"></app-select-category>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="brand">品牌</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" id="brand">
+                    <app-select-brand [(selectedBrand)]="selectedBrand" (brandChange)="brandChange($event)"></app-select-brand>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status">上架</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-switch formControlName="status" [(ngModel)]="isShelves"></nz-switch>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="freight">运费设置</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                      <app-select-freight [(selectedFreight)]="selectedFreight"></app-select-freight>
+                    </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="image">商品图片</nz-form-label>                    
+                <div class="ant-col-sm-14">
+                    <nz-upload
+                        class="avatar-uploader"
+                        [nzAction]="uploadUrl"
+                        nzName="image"
+                        nzListType="picture-card"
+                        [nzShowUploadList]="true"
+                        [nzRemove]="removeProductImg"
+                        [(nzFileList)]="fileList"
+                        [nzShowButton]="fileList.length < 1"
+                        nzLimit="1"
+                        nzName="file"
+                        nzFileType="image/png,image/jpeg"
+                        nzSize="1024"
+                        [nzPreview]="handlePreview"
+                        (nzChange)="handleProductChange($event)"
+                        >
+                        
+                        <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+                        <div class="ant-upload-text">Upload</div>
+                   
+                    </nz-upload>
+                    <nz-modal
+                    [nzVisible]="previewVisible"
+                    [nzContent]="modalContent"
+                    [nzFooter]="null"
+                    (nzOnCancel)="previewVisible = false"
+                    >
+                    </nz-modal>
+                </div>
+            </nz-form-item>
+    </form>
+    <nz-divider></nz-divider>
+    <div nz-row nzAlign="middle" nzType="flex" nzJustify="space-between">
+        <div nz-col nzSpan="4">
+            <label>商品规格</label>
+        </div>
+        <div nz-col nzSpan="4" >
+            <button nz-button (click)="addRow()" nzType="primary" style="margin-bottom: 16px;">Add</button>
+        </div>
+    </div>
+    <div nz-row>
+        <div nz-col nzSpan="24">
+            <nz-table #specifications nzSize="small" [nzData]="specificationData">
+                <thead>
+                  <tr>
+                    <th>规格名称</th>
+                    <th>SKU编码</th>
+                    <th>价格</th>
+                    <th>重量</th>
+                    <th>数量</th>
+                    <th>图片</th>
+                    <td>Action</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of specifications.data">
+                    <td>
+                        <div class="editable-cell" *ngIf="editId !== data.tid; else editName">
+                            <div class="editable-cell-value-wrap" (click)="startEdit(data.tid, $event)">
+                              {{ data.name }}
+                            </div>
+                          </div>
+                          <ng-template #editName>
+                            <input type="text" nz-input [(ngModel)]="data.name" />
+                          </ng-template>
+                    </td>
+                    <td>
+                        <div class="editable-cell" *ngIf="editId !== data.tid; else editbarcode">
+                            <div class="editable-cell-value-wrap" (click)="startEdit(data.tid, $event)">
+                              {{ data.barcode }}
+                            </div>
+                          </div>
+                          <ng-template #editbarcode>
+                            <input type="text" nz-input [(ngModel)]="data.barcode" />
+                          </ng-template>
+                    </td>
+                    <td>
+                        <div class="editable-cell" *ngIf="editId !== data.tid; else editPrice">
+                            <div class="editable-cell-value-wrap" (click)="startEdit(data.tid, $event)">
+                              {{ data.price }}
+                            </div>
+                          </div>
+                          <ng-template #editPrice>
+                            <input type="text" nz-input [(ngModel)]="data.price" />
+                          </ng-template>
+                    </td>
+                    <td>
+                        <div class="editable-cell" *ngIf="editId !== data.tid; else editWeight">
+                            <div class="editable-cell-value-wrap" (click)="startEdit(data.tid, $event)">
+                              {{ data.weight }}
+                            </div>
+                          </div>
+                          <ng-template #editWeight>
+                            <input type="text" nz-input [(ngModel)]="data.weight" />
+                          </ng-template>
+                    </td>
+                    <td>
+                        <div class="editable-cell" *ngIf="editId !== data.tid; else editNum">
+                            <div class="editable-cell-value-wrap" (click)="startEdit(data.tid, $event)">
+                              {{ data.number }}
+                            </div>
+                          </div>
+                          <ng-template #editNum>
+                            <input type="text" nz-input [(ngModel)]="data.number" />
+                          </ng-template>
+                    </td>
+                    <td>
+                        <nz-upload
+                        class="avatar-uploader"
+                        [nzAction]="uploadUrl"
+                        nzName="image"
+                        nzListType="picture-card"
+                        [nzShowUploadList]="true"
+                        [(nzFileList)]="imagesList[data.tid]"
+                        [nzShowButton]="imagesList[data.tid] && imagesList[data.tid].length < 1"
+                        nzName="file"
+                        nzFileType="image/png,image/jpeg"
+                        nzLimit="1"
+                        [nzRemove]="removeSpecBtn"
+                        nzSize="1024"
+                        [nzPreview]="handlePreview"
+                        (nzChange)="handleSpecificationChange($event,data.tid)"
+                        >
+                        <i class="upload-icon" nz-icon [nzType]="spcloading ? 'loading' : 'plus'"></i>
+                        <div class="ant-upload-text">Upload</div>
+                        </nz-upload>
+                    </td>
+                    <td>
+                        <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.tid)">Delete</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+        </div>
+    </div>
+</nz-modal>
+
+<ng-template #modalContent>
+  <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+</ng-template>

@@ -1,0 +1,15 @@
+
+<div class="divinfo">
+    <app-select-express-company [(expressCode)]="expressCode" [(selecedComany)]="selecedComany"></app-select-express-company>
+    <nz-form-item class="div-button">
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzOffset="8">
+          <div>
+            <span><a (click)="changeExpressType(1)">我要拆单(包)发货</a></span>
+            <span nz-tooltip nzTooltipTitle="商品可拆分为多个包裹发货"><i nz-icon nzType="question-circle" nzTheme="outline" ></i></span>
+          </div>
+          <div>
+            <button nz-button class="login-form-button" [nzType]="'primary'" nzSize="large" (click)="submit()" [nzLoading]="loading">确定</button>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+</div>

@@ -1,0 +1,138 @@
+<form nz-form [formGroup]="validateForm" class="ant-advanced-search-form">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="firstName">First Name</nz-form-label>
+          <nz-form-control nzSpan="14" nzErrorTip="Please input your Name!">
+            <input
+              nz-input
+              placeholder="Your Name"
+              formControlName="firstName"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="lastName">Last Name</nz-form-label>
+          <nz-form-control nzSpan="14" nzErrorTip="Please input your Name!">
+            <input
+              nz-input
+              placeholder="Your Last Name"
+              formControlName="lastName"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="email">Email Addreess</nz-form-label>
+          <nz-form-control nzSpan="14">
+            <input
+              nz-input
+              placeholder="Type Your Email"
+              formControlName="email"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12" >
+        <nz-form-item nzFlex nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="phone">Phone Number</nz-form-label>
+          <nz-form-control nzSpan="14">
+            <input
+              nz-input
+              placeholder="Type Your Phone Number"
+              formControlName="phone"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="24">
+        <nz-form-item nzFlex  nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label  nzSpan="4" nzFor="street">Street</nz-form-label>
+          <nz-form-control nzSpan="19">
+            <input
+              nz-input
+              placeholder="Street at apartment number"
+              formControlName="street"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="city">Town / City</nz-form-label>
+          <nz-form-control nzSpan="14">
+            <nz-select
+                nzMode="default"
+                nzPlaceHolder="City name"
+                nzAllowClear
+                nzShowSearch
+                nzServerSearch
+                formControlName="city"
+                (ngModelChange)="cityChange($event)"
+                (nzOnSearch)="onSearch($event)"
+              >
+              <ng-container *ngFor="let o of cityList">
+                  <nz-option *ngIf="!isLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+              </ng-container>
+              <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="suburb">Suburb</nz-form-label>
+          <nz-form-control nzSpan="14">
+            <nz-select
+                nzMode="default"
+                nzPlaceHolder="Suburb name"
+                nzAllowClear
+                nzShowSearch
+                nzServerSearch
+                formControlName="suburb"
+                (ngModelChange)="suburbChange($event)"
+                (nzOnSearch)="onSuburbSearch($event)"
+              >
+              <ng-container *ngFor="let o of suburbList">
+                  <nz-option *ngIf="!isLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+              </ng-container>
+              <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex  nzType="flex" nzGutter="8" nzJustify="start" nzAlign="middle">
+          <nz-form-label nzSpan="8" nzFor="postcode">Postcode / ZIP</nz-form-label>
+          <nz-form-control nzSpan="14">
+            <input
+              nz-input
+              placeholder="Your postal code"
+              formControlName="postcode"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+</form>
+
+<div nz-row nzType="flex" nzJustify="end" nzGutter="8">
+    <div nz-col>        
+        <button nz-button nzType="primary" (click)="submitForm()" [nzLoading]="loading">提交</button>
+    </div>
+</div>

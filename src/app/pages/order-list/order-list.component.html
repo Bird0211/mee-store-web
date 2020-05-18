@@ -1,0 +1,125 @@
+
+        <div nz-row nzJustify="start" [nzGutter]="[16,8]"> 
+            <div nz-col>
+                <nz-input-group nzCompact>
+                    <nz-select [(ngModel)]="dateType">
+                        <nz-option nzLabel="下单时间" nzValue="0" ></nz-option>
+                        <nz-option nzLabel="支付时间" nzValue="1" ></nz-option>
+                    </nz-select>
+                    <nz-range-picker [(ngModel)]="dateRange" class="time-picker"></nz-range-picker>
+                </nz-input-group>
+            </div>
+            <div nz-col>
+                <label>订单状态 </label>
+                <nz-select [(ngModel)]="status">
+                    <nz-option nzLabel="全部" nzValue=""></nz-option>
+                    <nz-option [nzLabel]="'已下单'" nzValue="1002"></nz-option>
+                    <nz-option [nzLabel]="'待支付'" nzValue="1003"></nz-option>
+                    <nz-option [nzLabel]="'待发货'" nzValue="2001"></nz-option>
+                    <nz-option [nzLabel]="'已发货'" nzValue="3002"></nz-option>
+                    <nz-option [nzLabel]="'已完成'" nzValue="0"></nz-option>
+                    <nz-option [nzLabel]="'已取消'" nzValue="4001"></nz-option>
+                </nz-select>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                  <input nz-input type="text" placeholder="订单编号" [(ngModel)]="barcode"/>
+              </nz-input-group>
+              <ng-template #suffixIconButton>
+                  <button nz-button nzType="primary" nzSearch (click)="search()"><i nz-icon nzType="search"></i></button>
+              </ng-template>
+          </div>
+        </div>
+
+<nz-divider></nz-divider>
+
+<div nz-row [nzGutter]="[8,8]" nzAlign="top" nzJustify="start">
+    <div nz-col>
+        <nz-table #orderTable [nzData]="orders" (nzPageIndexChange)="changePageIndex($event)"
+        [nzTotal]="total"
+        [nzPageIndex]="pageIndex"
+        nzTableLayout="fixed"
+        [nzPageSize]="pageSize"
+        [nzLoading]="loading"
+        nzSize="small"
+        >
+            <thead>
+              <tr>
+                <th nzWidth="60%">商品信息</th>
+                <th>订单金额</th>
+                <th>客户信息</th>
+                <th>订单状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let data of orderTable.data">
+                <tr>
+                  <td colspan="3">
+                      <div nz-row nzType="flex" nzJustify="start"  nzGutter="8">
+                          <div nz-col nzSpan="12">订单编号：{{data.id}}</div>
+                          <div nz-col nzSpan="12">下单时间：{{data.createTime | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                      </div>
+                  </td>
+                  <td nzAlign="right">
+                    <a (click)="detail(data.id)" ng-href="#">订单详情<i nz-icon nzType="container" nzTheme="outline"></i></a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div nz-row *ngFor="let item of data.orderDetails">
+                       <div nz-col class="expand-td"><a (click)="showImg(item.image)"><img [src]="item.image" class="productimg"></a></div>
+                       <div nz-col class="product-font">
+                          <div nz-row nzType="flex" nzJustify="start">
+                            <h5>{{item.productName}} </h5><nz-tag [nzColor]="'blue'">{{item.specName}}</nz-tag>
+                          </div>
+                          <div nz-row nzType="flex" nzJustify="start" nzGutter="8">
+                            <div nz-col>数量:</div>
+                            <div nz-col>{{item.number}}</div>
+                          </div>
+                          <div nz-row nzType="flex" nzJustify="start" nzGutter="8">
+                            <div nz-col>单价:</div>
+                            <div nz-col>{{item.price}}</div>
+                          </div>
+                          <div nz-row nzType="flex" nzJustify="start" nzGutter="8">
+                            <div nz-col>商品编码:</div>
+                            <div nz-col>{{item.barcode}}</div>
+                          </div>
+                        </div>
+                      </div>
+                  </td>
+                  <td>
+                    {{data.totalPrice | currency}}
+                  </td>
+                  <td>
+                    {{data.userId}}
+                  </td>
+                  <td>
+                     <div [ngSwitch]="data.status">
+                       <p *ngSwitchCase="1001">订单已创建</p>
+                       <p *ngSwitchCase="1002">已下单,待填写地址</p>
+                       <p *ngSwitchCase="1003">待支付</p>
+                       <p *ngSwitchCase="2001">已支付,待发货</p>
+                       <p *ngSwitchCase="2002">部分发货</p>
+                       <p *ngSwitchCase="3001">已发货</p>
+                       <p *ngSwitchCase="4001">已取消</p>
+                       <p *ngSwitchCase="0">已完成</p>
+                     </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </nz-table>
+    </div>
+</div>
+
+
+<nz-modal
+        [nzVisible]="previewVisible"
+        [nzContent]="modalContent"
+        [nzFooter]="null"
+        (nzOnCancel)="previewVisible = false"
+      >
+        <ng-template #modalContent>
+          <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+        </ng-template>
+</nz-modal>

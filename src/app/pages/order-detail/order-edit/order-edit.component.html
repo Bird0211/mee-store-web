@@ -1,0 +1,103 @@
+
+    <div nz-row nzType="flex" nzJustify="start" nzAlign="middle" nzGutter="8">
+        <div nz-col nzSpan="22">
+            <nz-select
+                nzMode="default"
+                [(ngModel)]="selectedProduct"
+                nzPlaceHolder="输入商品名称或SKU"
+                nzShowSearch
+                [nzServerSearch]="true"
+                (nzOnSearch)="onSearch($event)"
+                (ngModelChange)="addProduct()"
+                >
+                <nz-option nzCustomContent="true" *ngFor="let o of optionList" [nzValue]="o.specificationId" [nzLabel]="o.productName">
+                    <div nz-row nzType="flex" nzJustify="start" nzGutter="8">
+                        <div nz-col>
+                            <img [src]="o.image"/>
+                        </div>
+                        <div nz-col>
+                            <label>{{o.productName}}</label>
+                            <nz-tag [nzColor]="'volcano'">{{o.specificationName}}</nz-tag>
+                        </div>
+                        <div nz-col>
+                            <label>{{o.barcode}}</label>
+                        </div>
+                    </div>
+                </nz-option>
+                <nz-option *ngIf="displayTips" nzDisabled nzCustomContent>
+                    Type at lease 2 letters to Search
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="2">
+            <button nz-button nzType="primary"  (click)="addProduct()"><i nz-icon nzType="plus"></i></button>
+        </div>
+    </div>
+<div nz-row nzType="flex">
+    <div nz-col nzSpan="24">
+        <nz-table #basicTable 
+                    [nzData]="orders" 
+                    nzShowPagination="false"
+                    nzTableLayout="fixed"
+                    >
+            <thead>
+              <tr>
+                <th>图片</th>
+                <th>名称</th>
+                <th>规格</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>总价</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data">
+                <td><img [src]="data.image"></td>
+                <td>{{data.productName}}</td>
+                <td>{{data.specName}}</td>
+                <td>
+                    <nz-input-number 
+                    [(ngModel)]="data.number" 
+                    nzMin="1" 
+                    nzStep="1"
+                    (ngModelChange)="changeValue()">
+
+                    </nz-input-number>
+                </td>
+                <td>
+                    <nz-input-number
+                    [(ngModel)]="data.price"
+                    [nzMin]="1"
+                    [nzMax]="100"
+                    [nzStep]="1"
+                    [nzFormatter]="formatterDollar"
+                    [nzParser]="parserDollar"
+                    (ngModelChange)="changeValue()"
+                    >
+                </nz-input-number>
+                </td>
+                <td>{{data.total|currency}}</td>
+                <td>
+                    <a nz-popconfirm
+                    nzPopconfirmTitle="确定删除?"
+                    nzPopconfirmPlacement="topRight"
+                    (nzOnConfirm)="confirm(data.specId)"
+                    (nzOnCancel)="cancel()">
+                    <i nz-icon nzType="delete" nzTheme="outline"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+    </div>
+</div>
+<div nz-row nzType="flex" nzAlign="middle" nzJustify="end">
+    <div nz-col>
+        <h3>总计: {{totalPrice}} | 总件数: {{totalNum}} </h3>
+    </div>
+</div>
+<div nz-row nzType="flex" nzJustify="end" nzGutter="8">
+    <div nz-col>        
+        <button nz-button nzType="primary" [disabled]="orders.length === 0" (click)="submitOrder()" [nzLoading]="submintloading">提交</button>
+    </div>
+</div>

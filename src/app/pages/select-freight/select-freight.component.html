@@ -1,0 +1,3 @@
+<nz-select [ngModel]="selectedFreight" (nzOpenChange)="loadFreight()" (ngModelChange)="changeFreight($event)" [nzLoading]="loading">
+    <nz-option *ngFor="let item of freight" [nzValue]="item.id" [nzLabel]="item.name"></nz-option>
+</nz-select>

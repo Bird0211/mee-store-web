@@ -1,0 +1,35 @@
+
+<div nz-row [nzGutter]="8">
+    <div nz-col nzSpan="8">
+        <nz-list nzSize="large" nzBordered nzHeader="支付金额" [nzFooter]="totalFee" *ngIf="fee && fee.feeDetail">
+            <nz-list-item *ngFor="let item of fee.feeDetail">
+               <span>{{item.feeType === 0 ? '订单金额' : '物流金额'}}</span> 
+               <span>{{item.fee|currency}}</span>
+            </nz-list-item>
+        </nz-list>
+    </div>
+    <div nz-col nzSpan="8">
+        <nz-list  nzSize="large" nzBordered nzHeader="支付方式" *ngIf="payMethod && payMethod.length > 0">
+            <nz-radio-group [(ngModel)]="selectedPayMethod" (ngModelChange)="changePayMethod($event)">
+                <nz-list-item *ngFor="let item of payMethod">
+                    <label nz-radio [nzValue]="item.methodCode">{{item.methodName}}</label>
+                </nz-list-item>
+            </nz-radio-group>
+        </nz-list>
+    </div>
+    <div nz-col> 
+        <nz-alert nzType="info" [nzMessage]="payMessage" [ngClass]="{'showAlert': !payMessage}"></nz-alert>
+    </div>
+
+</div>
+<div nz-row nzType="flex" nzJustify="end" nzGutter="8">
+    <div nz-col>        
+        <button nz-button nzType="primary" (click)="submit()" [nzLoading]="loading">提交</button>
+    </div>
+</div>
+<ng-template #totalFee>
+    <div >
+        <span><strong>总费用:</strong></span>
+        <span class="float-right"> <strong>{{fee.totalFee |currency}}</strong></span>
+    </div>
+</ng-template>

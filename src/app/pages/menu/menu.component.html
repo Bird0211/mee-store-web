@@ -1,0 +1,34 @@
+<ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+    <li nz-submenu nzOpen nzTitle="产品/库存" nzIcon="dashboard">
+      <ul>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="item">商品</a>
+        </li>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="freight">运费</a>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu nzOpen nzTitle="订单管理" nzIcon="form">
+      <ul>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="order/0">创建订单</a>
+        </li>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="order-list">订单管理</a>
+        </li>
+      </ul>
+    </li>
+<!--
+    <li nz-submenu nzOpen nzTitle="用户管理" nzIcon="form">
+      <ul>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="user">创建订单</a>
+        </li>
+        <li nz-menu-item nzMatchRouter>
+          <a>创建订单</a>
+        </li>
+      </ul>
+    </li>
+-->
+  </ul>

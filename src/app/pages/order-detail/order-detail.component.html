@@ -1,0 +1,19 @@
+<div>
+    <nz-steps nzType="navigation" nzSize="small" [nzCurrent]="index"  (nzIndexChange)="onIndexChange($event)">
+        <nz-step *ngFor="let item of step"
+            [nzTitle]="item.title"
+            [nzSubtitle]="item.subTitle"
+            [nzStatus]="item.status"
+            [nzDescription]="item.description"
+            [nzDisabled]="item.disabled"
+            [ngClass]="{'show': !item.isShow}"
+        >
+        </nz-step>
+    </nz-steps>
+</div>
+<nz-divider></nz-divider>
+<div class="teps-content">
+    <nz-spin nzSimple=false [nzSpinning]="isSpinning" [nzSize]="'large'">
+        <ng-template appOrderHost></ng-template>
+    </nz-spin>
+</div>

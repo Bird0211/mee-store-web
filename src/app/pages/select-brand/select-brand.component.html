@@ -1,0 +1,21 @@
+<nz-select [nzDropdownRender]="addBrandTemp" 
+            (nzOpenChange)="openBrand($event)" 
+            [nzLoading]="isLoading" 
+            [(ngModel)]="selectedBrand" 
+            (ngModelChange)="changeBrand($event)">
+    <nz-option *ngFor="let item of brands" [nzValue]="item.id" [nzLabel]="item.brandName"></nz-option>
+</nz-select>
+
+<ng-template #addBrandTemp>
+    <nz-divider></nz-divider>
+    <div class="add-item" [hidden]="!isShowBrand">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="输入品牌名称" [(ngModel)]="newBrandName"/>
+        </nz-input-group>
+            <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" (click)="addBrand()" nzSearch><i nz-icon nzType="plus"></i></button>
+        </ng-template>
+        <nz-divider></nz-divider>
+     </div>
+    <div class="add-item" (click)="addBrandItem()"><a><i nz-icon nzType="plus"></i> Add item</a></div>
+</ng-template>

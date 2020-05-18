@@ -1,0 +1,15 @@
+<div nz-row>
+    <div nz-col>
+        <button nz-button nzType="primary" (click)="addFrieht()">添加运费模板</button>
+    </div>
+</div>
+<div nz-row *ngFor="let item of datas" class="item">
+    <div nz-col>
+        <app-freight-item [freightVo]="item" [default]="defaultId" 
+                      (defaultChange)="setDefault($event)" (delete)="deleteFreight($event)"></app-freight-item>
+    </div>
+</div>
+
+<app-freight-drawer [(visible)]="visible" title="添加运费模板" 
+        (loadFeight)="reLoadFreight()"
+        (visibleChange)="visibleChange($event)"></app-freight-drawer>
